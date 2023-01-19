@@ -1,37 +1,19 @@
-import { useEffect, useState } from 'react';
-import './App.css'
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
-const url = 'https://nominatim.openstreetmap.org/search?'
-const fetchLocation = async (p:{query:string}) => {
-  try {
-    const res = await fetch(`${url}q=${p.query}&format=json&extratags=1`)
-    const data = await res.json();
-    console.log('----da', data);
-  }catch(err){
-    console.log('--err--',err)
-  }
-}
+import Dashboard from "./component/Dashboard";
+import "./App.css";
 
 function App() {
-  const [searchQuery, setSearchQuery] = useState<string>('Boston MA');
-
-  useEffect(() => {
-    (async () => {
-      await fetchLocation({query: searchQuery})
-    })()
-  },[])
-
-  const findResult = async () => {
-    await fetchLocation({query: searchQuery})
-  }
-
   return (
     <div className="App">
-      <input onChange={(e) => setSearchQuery(e.target.value)} />
-      <button onClick={findResult}>Search</button>
-     hello
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Dashboard />}></Route>
+          <Route path="*" element={<Navigate to={"/"} />} />
+        </Routes>
+      </BrowserRouter>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
