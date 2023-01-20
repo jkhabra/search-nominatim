@@ -92,3 +92,13 @@ iframe.map {
     min-height: 15em;
     border: none;
 }
+
+@media (max-width: 450px) {
+    .search-body {
+      flex-direction: column;
+    }
+
+    .search-input {
+        width: 90%;
+      }
+  }

@@ -23,7 +23,7 @@ const fetchLocation = async (p: { query: string }) => {
     );
     const data = await res.json();
     if (res.status === 200 && data) {
-      console.log("----da", data);
+      //console.log("----da", data);
       return data;
     }
     return [];
@@ -92,7 +92,6 @@ const Dashboard = () => {
   };
 
   const showInMap = (item: any) => {
-    console.log("--itme--", item);
     setCods(item);
   };
 
