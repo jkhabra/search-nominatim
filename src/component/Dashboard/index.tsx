@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import dayjs from 'dayjs';
 
 import Listing from "../Listing";
 import RanderMap from "../maps";
@@ -36,8 +37,8 @@ const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState<string>("Boston MA");
   const [tempQuery, setTempQuery] = useState<string>(""); //temp save the query
   const [serchRes, setSearchRes] = useState<SearchProps[]>([]);
-  const [searchHistory, setSearchHistory] = useState<string[]>([]);
-  const [cods, setCods] = useState<SearchProps | {}>({});
+  const [searchHistory, setSearchHistory] = useState<{id:string,title:string,date:any}[]>([]);
+  const [cods, setCods] = useState<SearchProps>();
 
   const getQueryString = (q: { name: string }) => {
     return searchParams.get(q.name);
@@ -70,14 +71,16 @@ const Dashboard = () => {
     })();
   }, []);
 
-  const findResult = async (query?: string) => {
-    const data = await fetchLocation({ query: query || searchQuery });
+  const findResult = async (q: {title:string}) => {
+    const str:string =  q.title ;
+    const data = await fetchLocation({ query: str });
     if (data) {
-      setSearchHistory([...searchHistory, searchQuery]);
-      setTempQuery(searchQuery);
+      // for to keep unique (history) values [...new Set([...searchHistory, str])]
+      setSearchHistory([...searchHistory, { id: JSON.stringify(Math.random()), title: str, date: dayjs() }]); 
+      setTempQuery(str);
       setSearchRes(data);
-      if (query) {
-        setSearchQuery(query);
+      if (str) {
+        setSearchQuery(str);
       }
     }
   };
@@ -88,18 +91,16 @@ const Dashboard = () => {
   };
 
   const handleShare = () => {
-    const copyText = `${window.location.origin}?id=${cods.place_id}&place=${tempQuery}`;
-    setSearchParams({ id: cods.place_id, place: tempQuery });
-
+    const copyText = `${window.location.origin}?id=${cods?.place_id}&place=${tempQuery}`;
+    if(cods?.place_id){
+      setSearchParams({ id: JSON.stringify(cods.place_id), place: tempQuery });
+    }
     // copy to clipboard
     navigator.clipboard.writeText(copyText);
   };
 
   const resutls = serchRes.map((i: any) => {
-    return { id: i.place_id, title: i.display_name };
-  });
-  const history = searchHistory.map((i: any) => {
-    return { id: JSON.stringify(Math.random()), title: i };
+    return {...i, id: i.place_id, title: i.display_name };
   });
 
   return (
@@ -113,7 +114,7 @@ const Dashboard = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
 
-            <button onClick={() => findResult()} disabled={!searchQuery.length}>
+            <button onClick={() => findResult({title: searchQuery})} disabled={!searchQuery.length}>
               Search
             </button>
           </div>
@@ -128,14 +129,13 @@ const Dashboard = () => {
           </span>
         </div>
 
-        <RanderMap cod={[cods?.lat, cods?.lon]} />
+        <RanderMap cod={[ cods?.lat, cods?.lon]} />
 
         <div className="search-history">
           <Listing
-            type="findResult"
             title="Search History"
             onAction={findResult}
-            items={history}
+            items={searchHistory}
           />
         </div>
 
