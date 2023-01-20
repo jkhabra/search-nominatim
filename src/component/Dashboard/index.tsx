@@ -80,8 +80,8 @@ const Dashboard = () => {
     if (data) {
       // for to keep unique (history) values [...new Set([...searchHistory, str])]
       setSearchHistory([
-        ...searchHistory,
         { id: JSON.stringify(Math.random()), title: str, date: dayjs() },
+        ...searchHistory,
       ]);
       setTempQuery(str);
       setSearchRes(data);
@@ -152,6 +152,7 @@ const Dashboard = () => {
         </div>
 
         <Listing
+          itemId={cods?.place_id}
           isActive={activeTile === 1}
           onAction={showInMap}
           items={resutls}

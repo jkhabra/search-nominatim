@@ -11,6 +11,7 @@ export interface ListingItemProps {
 
 interface ListingProps {
   isActive: boolean;
+  itemId?: any;
   type?: string;
   isFetching?: boolean;
   onAction: Function;
@@ -33,9 +34,15 @@ const Listing = (p: ListingProps) => {
   return (
     <div className="list-container">
       {p.items.map((i) => (
-        <div key={i.id} className="list-resutl" onClick={() => p.onAction(i)}>
+        <div
+          key={i.id}
+          className={`list-resutl ${i.id === p.itemId && "active"}`}
+          onClick={() => p.onAction(i)}
+        >
           <span>{i.title}</span>
-          {i.date && <span className="res-time">{` ${dayjs(i.date).fromNow()}`}</span>}
+          {i.date && (
+            <span className="res-time">{` ${dayjs(i.date).fromNow()}`}</span>
+          )}
         </div>
       ))}
     </div>
