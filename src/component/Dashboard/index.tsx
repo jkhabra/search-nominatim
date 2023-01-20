@@ -92,6 +92,7 @@ const Dashboard = () => {
   };
 
   const showInMap = (item: any) => {
+    //console.log('---item---', item)
     setCods(item);
   };
 
@@ -102,6 +103,12 @@ const Dashboard = () => {
     }
     // copy to clipboard
     navigator.clipboard.writeText(copyText);
+  };
+
+  const handleEnterPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      await findResult({ title: searchQuery });
+    }
   };
 
   const resutls = serchRes.map((i: any) => {
@@ -118,6 +125,7 @@ const Dashboard = () => {
             <input
               className="search-input"
               value={searchQuery}
+              onKeyDown={handleEnterPress}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
 
