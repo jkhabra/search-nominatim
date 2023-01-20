@@ -19,7 +19,7 @@ const url = "https://nominatim.openstreetmap.org/search?";
 const fetchLocation = async (p: { query: string }) => {
   try {
     const res = await fetch(
-      `${url}q=${p.query}&format=json&extratags=1&addressdetails=1`
+      `${url}q=${p.query}&format=json&extratags=1&addressdetails=1&limit=8`
     );
     const data = await res.json();
     if (res.status === 200 && data) {
@@ -127,9 +127,12 @@ const Dashboard = () => {
                 !searchQuery.length && "btn-disable"
               } search-button`}
               onClick={() => findResult({ title: searchQuery })}
-              disabled={!searchQuery.length}
             >
               Search
+            </button>
+
+            <button className={`search-button`} onClick={handleShare}>
+              Share
             </button>
           </div>
         </div>
@@ -171,9 +174,12 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <RanderMap cod={[cods?.lat, cods?.lon]} />
-
-        <button onClick={handleShare}>Share</button>
+        <div className="detail-wrapper">
+          <h5 className={`list-title active`}>Map</h5>
+          <div className="map-wrapper">
+            <RanderMap cod={[cods?.lat, cods?.lon]} />
+          </div>
+        </div>
       </div>
     </>
   );
