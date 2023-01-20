@@ -8,6 +8,8 @@ const RanderMap = (p: mapProps) => {
   return (
     <>
       <div>map</div>
+      <div id="map-canvas"></div>
+
       <iframe
         src={`http://maps.google.com/maps?q=${p.cod}&z=15&output=embed`}
         height="450"
