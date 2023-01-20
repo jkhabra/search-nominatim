@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 
 import Listing from "../Listing";
 import RanderMap from "../maps";
@@ -35,9 +35,12 @@ const fetchLocation = async (p: { query: string }) => {
 const Dashboard = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<string>("Boston MA");
+  const [activeTile, setActiveTile] = useState<0 | 1>(0);
   const [tempQuery, setTempQuery] = useState<string>(""); //temp save the query
   const [serchRes, setSearchRes] = useState<SearchProps[]>([]);
-  const [searchHistory, setSearchHistory] = useState<{id:string,title:string,date:any}[]>([]);
+  const [searchHistory, setSearchHistory] = useState<
+    { id: string; title: string; date: any }[]
+  >([]);
   const [cods, setCods] = useState<SearchProps>();
 
   const getQueryString = (q: { name: string }) => {
@@ -71,12 +74,15 @@ const Dashboard = () => {
     })();
   }, []);
 
-  const findResult = async (q: {title:string}) => {
-    const str:string =  q.title ;
+  const findResult = async (q: { title: string }) => {
+    const str: string = q.title;
     const data = await fetchLocation({ query: str });
     if (data) {
       // for to keep unique (history) values [...new Set([...searchHistory, str])]
-      setSearchHistory([...searchHistory, { id: JSON.stringify(Math.random()), title: str, date: dayjs() }]); 
+      setSearchHistory([
+        ...searchHistory,
+        { id: JSON.stringify(Math.random()), title: str, date: dayjs() },
+      ]);
       setTempQuery(str);
       setSearchRes(data);
       if (str) {
@@ -92,7 +98,7 @@ const Dashboard = () => {
 
   const handleShare = () => {
     const copyText = `${window.location.origin}?id=${cods?.place_id}&place=${tempQuery}`;
-    if(cods?.place_id){
+    if (cods?.place_id) {
       setSearchParams({ id: JSON.stringify(cods.place_id), place: tempQuery });
     }
     // copy to clipboard
@@ -100,44 +106,72 @@ const Dashboard = () => {
   };
 
   const resutls = serchRes.map((i: any) => {
-    return {...i, id: i.place_id, title: i.display_name };
+    return { ...i, id: i.place_id, title: i.display_name };
   });
 
   return (
     <>
       <div className="container">
+        <h2>Find any place!</h2>
         <div className="search-container">
-          <span>Search Place</span>
+          <h5 className={`list-title active`}>Search a Place</h5>
           <div className="search-body">
             <input
+              className="search-input"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
 
-            <button onClick={() => findResult({title: searchQuery})} disabled={!searchQuery.length}>
+            <button
+              className={`${
+                !searchQuery.length && "btn-disable"
+              } search-button`}
+              onClick={() => findResult({ title: searchQuery })}
+              disabled={!searchQuery.length}
+            >
               Search
             </button>
           </div>
         </div>
 
-        <Listing title="Search Result" onAction={showInMap} items={resutls} />
-
-        <div className="location-details">
-          <span>Population: {cods?.extratags?.population || "NA"}</span>
-          <span>
-            Year: {cods?.extratags ? cods.extratags["census:population"] : "NA"}
-          </span>
+        <div className="sec-container">
+          <h5
+            onClick={() => setActiveTile(0)}
+            className={`${!activeTile && "active"} list-title`}
+          >
+            Search Result
+          </h5>
+          <h5
+            onClick={() => setActiveTile(1)}
+            className={`${activeTile && "active"} list-title`}
+          >
+            Search History
+          </h5>
         </div>
 
-        <RanderMap cod={[ cods?.lat, cods?.lon]} />
+        <Listing
+          isActive={activeTile === 1}
+          onAction={showInMap}
+          items={resutls}
+        />
+        <Listing
+          isActive={activeTile === 0}
+          onAction={findResult}
+          items={searchHistory}
+        />
 
-        <div className="search-history">
-          <Listing
-            title="Search History"
-            onAction={findResult}
-            items={searchHistory}
-          />
+        <div className="detail-wrapper">
+          <h5 className={`list-title active`}>Result Deatils</h5>
+
+          <div className="location-details">
+            <span>{`Population: ${cods?.extratags?.population || "NA"}`}</span>
+            <span>
+              {`Year:  ${cods?.extratags["census:population"] || "NA"}`}
+            </span>
+          </div>
         </div>
+
+        <RanderMap cod={[cods?.lat, cods?.lon]} />
 
         <button onClick={handleShare}>Share</button>
       </div>

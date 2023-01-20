@@ -1,3 +1,30 @@
 .list-container {
     width: 100%;
+    margin: 10px 0;
+}
+
+.list-resutl {
+    padding: 10px;
+    border: 1px solid #cfd4cf;
+    margin-top: 1px;
+    /* width: 65%; */
+    border-radius: 3px;
+    font-size: 1em;
+    color: #302929;
+    cursor: pointer;
+}
+
+.list-resutl:hover{
+    background: #eae4e4;
+    color: #2776ed;
+}
+
+.no-item {
+    display: flex;
+    border: 1px solid #cfd4cf;
+    min-height: 5em;
+    justify-content: center;
+    align-items: center;
+    color: #302929;
+    margin: 10px 0;
 }

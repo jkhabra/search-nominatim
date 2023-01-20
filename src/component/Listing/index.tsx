@@ -1,6 +1,6 @@
 import "./style.css";
 import dayjs from "dayjs";
-import relativeTime from 'dayjs/plugin/relativeTime';
+import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 export interface ListingItemProps {
@@ -10,7 +10,7 @@ export interface ListingItemProps {
 }
 
 interface ListingProps {
-  title: string;
+  isActive: boolean;
   type?: string;
   isFetching?: boolean;
   onAction: Function;
@@ -18,16 +18,22 @@ interface ListingProps {
 }
 
 const Listing = (p: ListingProps) => {
-  if (!p.items) {
-    return <span>No items</span>;
+  if (p.isActive) {
+    return null;
+  }
+
+  if (!p.items?.length) {
+    return (
+      <div className="no-item">
+        <span>No data found</span>
+      </div>
+    );
   }
 
   return (
     <div className="list-container">
-      <span>{p.title}</span>
-
       {p.items.map((i) => (
-        <div key={i.id} className="search-resutl" onClick={() => p.onAction(i)}>
+        <div key={i.id} className="list-resutl" onClick={() => p.onAction(i)}>
           <span>{i.title}</span>
           {i.date && <span>{dayjs(i.date).fromNow()}</span>}
         </div>
