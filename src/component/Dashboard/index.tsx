@@ -18,7 +18,7 @@ interface SearchProps {
 }
 
 const url = "https://nominatim.openstreetmap.org/search?";
-const fetchLocation = async (p: { query: string, setLoading: Function }) => {
+const fetchLocation = async (p: { query: string; setLoading: Function }) => {
   try {
     p.setLoading(true);
     const res = await fetch(
@@ -102,7 +102,8 @@ const Dashboard = () => {
   };
 
   const handleShare = () => {
-    const copyText = `${window.location.origin}?id=${cods?.place_id}&place=${tempQuery}`;
+    const loaction = window.location;
+    const copyText = `${loaction.origin}${loaction.pathname}?id=${cods?.place_id}&place=${tempQuery}`;
     if (cods?.place_id) {
       setSearchParams({ id: JSON.stringify(cods.place_id), place: tempQuery });
     }
