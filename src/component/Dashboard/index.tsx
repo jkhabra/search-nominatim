@@ -98,7 +98,11 @@ const Dashboard = () => {
 
   const showInMap = (item: any) => {
     //console.log('---item---', item)
+    setLoading(true)
     setCods(item);
+    setTimeout(()=>{
+      setLoading(false)
+    }, 200)
   };
 
   const handleShare = () => {
@@ -126,7 +130,7 @@ const Dashboard = () => {
       <div className="container">
         <h2>Find any place!</h2>
         <div className="search-container">
-          <h5 className={`list-title active`}>Search a Place</h5>
+          <h5 className={`label`}>Search a Place</h5>
           <div className="search-body">
             <input
               className="search-input"
@@ -153,13 +157,13 @@ const Dashboard = () => {
         <div className="sec-container">
           <h5
             onClick={() => setActiveTile(0)}
-            className={`${!activeTile && "active"} list-title`}
+            className={`${!activeTile && "active"} list-title label`}
           >
             Search Result
           </h5>
           <h5
             onClick={() => setActiveTile(1)}
-            className={`${activeTile && "active"} list-title`}
+            className={`${activeTile && "active"} list-title label`}
           >
             Search History
           </h5>
@@ -179,7 +183,7 @@ const Dashboard = () => {
         />
 
         <div className="detail-wrapper">
-          <h5 className={`list-title active`}>Result Deatils</h5>
+          <h5 className={`label`}>Result Deatils</h5>
 
           <div className="location-details">
             {isLoading && <Loader />}
@@ -191,9 +195,9 @@ const Dashboard = () => {
         </div>
 
         <div className="detail-wrapper">
-          <h5 className={`list-title active`}>Map</h5>
+          <h5 className={`label`}>Map</h5>
           <div className="map-wrapper">
-            <RanderMap cod={[cods?.lat, cods?.lon]} isLoading={isLoading} />
+            <RanderMap cod={cods} isLoading={isLoading} zoom={5} />
           </div>
         </div>
       </div>

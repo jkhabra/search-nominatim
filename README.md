@@ -23,6 +23,7 @@ Follow this guide to setup an environment for developing this app
 ## Major Dependencies
 - [React](https://reactjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [Google Map React](https://www.npmjs.com/package/google-map-react)
 - [Dayjs](https://day.js.org/)
 
 ## Screenshot

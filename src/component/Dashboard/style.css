@@ -49,8 +49,13 @@ button.search-button {
   cursor: not-allowed !important;
 }
 
-.list-title {
+.label{
+  color: #2558a5;
   font-size: 1.2em;
+
+}
+
+.list-title {
   color: #979ca3;
   cursor: pointer;
 }
@@ -84,20 +89,6 @@ button.search-button {
   margin: 10px 0;
   padding: 10px;
   border: 1px solid #cfd4cf;
-}
-
-.mp {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 15em;
-}
-
-iframe.map {
-  width: 100%;
-  height: 100%;
-  border: none;
-  min-height: 15em;
 }
 
 @media (max-width: 450px) {
