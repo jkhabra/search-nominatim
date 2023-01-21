@@ -26,3 +26,4 @@ Follow this guide to setup an environment for developing this app
 - [Dayjs](https://day.js.org/)
 
 ## Screenshot
+![image](https://user-images.githubusercontent.com/22749805/213859592-6219d317-9f13-4930-9212-d992208f2cff.png)
