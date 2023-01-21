@@ -50,55 +50,62 @@ button.search-button {
 }
 
 .list-title {
-    font-size: 1.2em;
-    color: #979ca3;
-    cursor: pointer;
+  font-size: 1.2em;
+  color: #979ca3;
+  cursor: pointer;
 }
 
-.active{
-    color: #2558a5;
+.active {
+  color: #2558a5;
 }
 
-.sec-container{
-    display: flex;
-    column-gap: 15px;
+.sec-container {
+  display: flex;
+  column-gap: 15px;
 }
 
 .detail-wrapper {
-    margin: 5px 0;
+  margin: 5px 0;
 }
 
 .location-details {
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #cfd4cf;
-    min-height: 3em;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border-radius: 3px;
-    color: #302929;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #cfd4cf;
+  min-height: 3em;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 3px;
+  color: #302929;
 }
 
 .map-wrapper {
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #cfd4cf;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #cfd4cf;
+}
+
+.mp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 15em;
 }
 
 iframe.map {
-    width: 100%;
-    height: 100%;
-    min-height: 15em;
-    border: none;
+  width: 100%;
+  height: 100%;
+  border: none;
+  min-height: 15em;
 }
 
 @media (max-width: 450px) {
-    .search-body {
-      flex-direction: column;
-    }
-
-    .search-input {
-        width: 90%;
-      }
+  .search-body {
+    flex-direction: column;
   }
+
+  .search-input {
+    width: 90%;
+  }
+}

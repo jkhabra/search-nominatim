@@ -1,6 +1,7 @@
 import "./style.css";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import Loader from "../Loader";
 
 dayjs.extend(relativeTime);
 export interface ListingItemProps {
@@ -11,6 +12,7 @@ export interface ListingItemProps {
 
 interface ListingProps {
   isActive: boolean;
+  isLoading?: boolean;
   itemId?: any;
   type?: string;
   isFetching?: boolean;
@@ -21,6 +23,14 @@ interface ListingProps {
 const Listing = (p: ListingProps) => {
   if (p.isActive) {
     return null;
+  }
+
+  if (p.isLoading) {
+    return (
+      <div className="no-item">
+        <Loader />
+      </div>
+    );
   }
 
   if (!p.items?.length) {

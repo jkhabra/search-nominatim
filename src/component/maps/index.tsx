@@ -1,15 +1,23 @@
+import Loader from "../Loader";
 interface mapProps {
-  cod: any| []
+  isLoading: boolean;
+  cod: any | [];
 }
 
-const s = '30.8703853, 30.9103853, 76.520128, 76.560128';
-
 const RanderMap = (p: mapProps) => {
+  if (p.isLoading) {
+    return (
+      <div className="map-load no-item">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <>
       <iframe
         src={`http://maps.google.com/maps?q=${p.cod}&z=15&output=embed`}
-        className='map'
+        className="map"
       ></iframe>
     </>
   );

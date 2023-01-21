@@ -4,6 +4,8 @@ import dayjs from "dayjs";
 
 import Listing from "../Listing";
 import RanderMap from "../maps";
+import Loader from "../Loader";
+
 import "./style.css";
 
 interface SearchProps {
@@ -16,16 +18,19 @@ interface SearchProps {
 }
 
 const url = "https://nominatim.openstreetmap.org/search?";
-const fetchLocation = async (p: { query: string }) => {
+const fetchLocation = async (p: { query: string, setLoading: Function }) => {
   try {
+    p.setLoading(true);
     const res = await fetch(
       `${url}q=${p.query}&format=json&extratags=1&addressdetails=1&limit=8`
     );
     const data = await res.json();
     if (res.status === 200 && data) {
       //console.log("----da", data);
+      p.setLoading(false);
       return data;
     }
+    p.setLoading(false);
     return [];
   } catch (err) {
     console.log("--err--", err);
@@ -36,6 +41,7 @@ const Dashboard = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<string>("Boston MA");
   const [activeTile, setActiveTile] = useState<0 | 1>(0);
+  const [isLoading, setLoading] = useState<boolean>(false);
   const [tempQuery, setTempQuery] = useState<string>(""); //temp save the query
   const [serchRes, setSearchRes] = useState<SearchProps[]>([]);
   const [searchHistory, setSearchHistory] = useState<
@@ -53,11 +59,12 @@ const Dashboard = () => {
     (async () => {
       let data = [];
       if (placeName && palceId) {
-        data = await fetchLocation({ query: placeName });
+        data = await fetchLocation({ query: placeName, setLoading });
         setSearchQuery(placeName);
         setTempQuery(placeName);
       } else {
-        data = await fetchLocation({ query: searchQuery });
+        data = await fetchLocation({ query: searchQuery, setLoading });
+        setTempQuery(searchQuery);
       }
 
       if (data) {
@@ -76,7 +83,7 @@ const Dashboard = () => {
 
   const findResult = async (q: { title: string }) => {
     const str: string = q.title;
-    const data = await fetchLocation({ query: str });
+    const data = await fetchLocation({ query: str, setLoading });
     if (data) {
       // for to keep unique (history) values [...new Set([...searchHistory, str])]
       setSearchHistory([
@@ -84,10 +91,8 @@ const Dashboard = () => {
         ...searchHistory,
       ]);
       setTempQuery(str);
+      setSearchQuery(str);
       setSearchRes(data);
-      if (str) {
-        setSearchQuery(str);
-      }
     }
   };
 
@@ -161,6 +166,7 @@ const Dashboard = () => {
 
         <Listing
           itemId={cods?.place_id}
+          isLoading={isLoading}
           isActive={activeTile === 1}
           onAction={showInMap}
           items={resutls}
@@ -175,6 +181,7 @@ const Dashboard = () => {
           <h5 className={`list-title active`}>Result Deatils</h5>
 
           <div className="location-details">
+            {isLoading && <Loader />}
             <span>{`Population: ${cods?.extratags?.population || "NA"}`}</span>
             <span>
               {`Year:  ${cods?.extratags["census:population"] || "NA"}`}
@@ -185,7 +192,7 @@ const Dashboard = () => {
         <div className="detail-wrapper">
           <h5 className={`list-title active`}>Map</h5>
           <div className="map-wrapper">
-            <RanderMap cod={[cods?.lat, cods?.lon]} />
+            <RanderMap cod={[cods?.lat, cods?.lon]} isLoading={isLoading} />
           </div>
         </div>
       </div>
